@@ -8,7 +8,7 @@ export default function ValueProposition() {
     {
       icon: TrendingUp,
       title: "Retention-Driven Pacing",
-      tagline: "FINANCIAL MARKETING ANALYTICS APPLIED TO VIDEO",
+      tagline: "FINANCIAL MANAGEMENT ANALYTICS APPLIED TO VIDEO",
       description:
         "Every cut, audio transient, and pattern interrupt is calibrated against real audience retention graphs. By eliminating cognitive friction points, videos maintain engagement well past platform averages.",
       bullets: [
@@ -74,7 +74,7 @@ export default function ValueProposition() {
             </h2>
           </div>
           <p className="max-w-md text-sm text-[#8d8b86] font-normal leading-relaxed">
-            Most editors focus purely on aesthetic flair. As a Financial Marketing Graduate, I structure video edits to convert: analyzing viewer drop-off metrics, market positioning, and consumer psychology.
+            Most editors focus purely on aesthetic flair. As a Financial Management Graduate, I structure video edits to convert: analyzing viewer drop-off metrics, financial storytelling, and audience retention psychology.
           </p>
         </div>
 
@@ -153,3 +153,4 @@ export default function ValueProposition() {
     </section>
   );
 }
+

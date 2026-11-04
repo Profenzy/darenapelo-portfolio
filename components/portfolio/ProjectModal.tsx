@@ -15,7 +15,8 @@ import {
   Sparkles,
   CheckCircle2,
   ArrowRight,
-  Share2,
+  Smartphone,
+  Monitor,
 } from "lucide-react";
 
 interface ProjectModalProps {
@@ -33,7 +34,6 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
   const [duration, setDuration] = useState("0:00");
 
   useEffect(() => {
-    // Lock body scroll when modal is open
     if (project) {
       document.body.style.overflow = "hidden";
       setIsPlaying(true);
@@ -55,6 +55,8 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
   }, [onClose]);
 
   if (!project) return null;
+
+  const isVertical = project.aspectRatio === "9:16";
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -104,10 +106,8 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-[#0a0a0b]/90 backdrop-blur-xl animate-fade-in">
-      {/* Click outside to close */}
       <div className="absolute inset-0" onClick={onClose} />
 
-      {/* Modal Dialog Card */}
       <div className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#121214] border border-[#27272a] shadow-[0_25px_70px_rgba(0,0,0,0.85)] z-10 flex flex-col no-scrollbar">
         {/* Top Floating Close Button */}
         <button
@@ -118,10 +118,16 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
           <X className="w-5 h-5" />
         </button>
 
-        {/* Video Player Header Stage */}
-        <div className="relative w-full aspect-video sm:aspect-[16/9] bg-[#080809] overflow-hidden flex items-center justify-center">
-          {project.videoSrc ? (
-            <div className="relative w-full h-full flex items-center justify-center group">
+        {/* Video Player Header Stage (Fit to True Aspect Ratio, Zero Stretching!) */}
+        <div className="relative w-full bg-[#080809] p-4 sm:p-6 overflow-hidden flex items-center justify-center border-b border-[#1a1a1e]">
+          <div
+            className={`relative overflow-hidden rounded-2xl bg-black flex items-center justify-center shadow-2xl group ${
+              isVertical
+                ? "w-[260px] sm:w-[300px] aspect-[9/16] max-h-[62vh]"
+                : "w-full max-w-3xl aspect-[16/9]"
+            }`}
+          >
+            {project.videoSrc ? (
               <video
                 ref={videoRef}
                 src={project.videoSrc}
@@ -131,83 +137,71 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
                 muted={isMuted}
                 onTimeUpdate={handleTimeUpdate}
                 onClick={togglePlay}
-                className="max-h-full max-w-full object-contain cursor-pointer"
+                className="w-full h-full object-contain cursor-pointer"
               />
-
-              {/* Scrim overlay for controls */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#121214] via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-
-              {/* Player Overlay Controls */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 flex flex-col gap-2 z-20">
-                {/* Scrubbing timeline bar */}
-                <div
-                  onClick={handleSeek}
-                  className="w-full h-2 bg-white/20 hover:h-3 rounded-full cursor-pointer relative transition-all group/bar"
-                >
-                  <div
-                    className="h-full bg-gradient-to-r from-gold to-gold-light rounded-full relative"
-                    style={{ width: `${progress}%` }}
-                  >
-                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-[#f4f1ea] shadow-md scale-0 group-hover/bar:scale-100 transition-transform" />
-                  </div>
-                </div>
-
-                {/* Control bar buttons */}
-                <div className="flex items-center justify-between text-xs font-mono text-[#f4f1ea]">
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={togglePlay}
-                      className="p-2 rounded-full bg-white/10 hover:bg-gold hover:text-black transition-colors"
-                      aria-label={isPlaying ? "Pause" : "Play"}
-                    >
-                      {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
-                    </button>
-                    <button
-                      onClick={toggleMute}
-                      className="p-2 rounded-full bg-white/10 hover:bg-gold hover:text-black transition-colors"
-                      aria-label={isMuted ? "Unmute" : "Mute"}
-                    >
-                      {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                    </button>
-                    <span className="text-[#8d8b86]">
-                      {currentTime} / {duration !== "0:00" ? duration : project.runtime}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <span className="text-[11px] uppercase tracking-wider text-gold">
-                      {project.primaryFocus}
-                    </span>
-                    <button
-                      onClick={handleFullScreen}
-                      className="p-2 rounded-full bg-white/10 hover:bg-gold hover:text-black transition-colors"
-                      aria-label="Fullscreen"
-                    >
-                      <Maximize className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="relative w-full h-full">
+            ) : (
               <Image
                 src={project.posterSrc}
                 alt={project.title}
                 fill
-                className="object-cover"
+                className="object-contain"
               />
+            )}
+
+            {/* Hover overlay controls */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+
+            {/* In-Frame Controls Bar */}
+            <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 flex flex-col gap-2 z-20">
+              <div
+                onClick={handleSeek}
+                className="w-full h-1.5 bg-white/20 hover:h-2.5 rounded-full cursor-pointer relative transition-all group/bar"
+              >
+                <div
+                  className="h-full bg-gradient-to-r from-gold to-gold-light rounded-full relative"
+                  style={{ width: `${progress}%` }}
+                >
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#f4f1ea] shadow-md scale-0 group-hover/bar:scale-100 transition-transform" />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-xs font-mono text-[#f4f1ea]">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={togglePlay}
+                    className="p-1.5 rounded-full bg-white/10 hover:bg-gold hover:text-black transition-colors"
+                  >
+                    {isPlaying ? <Pause className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+                  </button>
+                  <button
+                    onClick={toggleMute}
+                    className="p-1.5 rounded-full bg-white/10 hover:bg-gold hover:text-black transition-colors"
+                  >
+                    {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                  </button>
+                  <span className="text-[11px] text-[#8d8b86]">
+                    {currentTime} / {duration !== "0:00" ? duration : project.runtime}
+                  </span>
+                </div>
+
+                <button
+                  onClick={handleFullScreen}
+                  className="p-1.5 rounded-full bg-white/10 hover:bg-gold hover:text-black transition-colors"
+                >
+                  <Maximize className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
-          )}
+          </div>
         </div>
 
         {/* Modal Info & Strategy Content */}
         <div className="p-6 sm:p-8 lg:p-10 flex flex-col gap-8">
-          {/* Header Row */}
           <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-6 border-b border-[#1a1a1e]">
             <div>
               <div className="flex flex-wrap items-center gap-2 mb-3">
-                <span className="px-3 py-1 rounded-full bg-gold/15 border border-gold/40 text-xs font-mono uppercase tracking-wider text-gold">
+                <span className="px-3 py-1 rounded-full bg-gold/15 border border-gold/40 text-xs font-mono uppercase tracking-wider text-gold flex items-center gap-1">
+                  {isVertical ? <Smartphone className="w-3 h-3 text-gold" /> : <Monitor className="w-3 h-3 text-gold" />}
                   {project.categoryLabel}
                 </span>
                 <span className="px-3 py-1 rounded-full bg-[#1a1a1e] border border-[#27272a] text-xs font-mono uppercase text-[#c8c5bc] flex items-center gap-1.5">
@@ -245,12 +239,11 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
             )}
           </div>
 
-          {/* Project Story & Strategy Breakdown */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-6">
               <div>
                 <h4 className="text-xs font-mono uppercase tracking-widest text-gold mb-2">
-                  OVERVIEW & MARKET OBJECTIVE
+                  OVERVIEW &amp; FINANCIAL MANAGEMENT RETENTION OBJECTIVE
                 </h4>
                 <p className="text-sm text-[#c8c5bc] leading-relaxed">
                   {project.description}
@@ -259,7 +252,7 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
 
               <div>
                 <h4 className="text-xs font-mono uppercase tracking-widest text-gold mb-3">
-                  RETENTION & PACING STRATEGY
+                  RETENTION &amp; PACING STRATEGY
                 </h4>
                 <ul className="space-y-3">
                   {project.strategyNotes.map((note, idx) => (
@@ -275,7 +268,6 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
               </div>
             </div>
 
-            {/* Sidebar with deliverables and CTA */}
             <div className="flex flex-col justify-between p-6 rounded-2xl bg-[#1a1a1e]/40 border border-[#27272a] space-y-6">
               <div>
                 <h4 className="text-xs font-mono uppercase tracking-widest text-[#f4f1ea] mb-3">

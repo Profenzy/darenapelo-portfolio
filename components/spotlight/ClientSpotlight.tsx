@@ -86,7 +86,7 @@ export default function ClientSpotlight({ onOpenProject }: ClientSpotlightProps)
                     autoPlay
                     controls
                     playsInline
-                    className="absolute inset-0 w-full h-full object-cover z-20"
+                    className="absolute inset-0 w-full h-full object-contain bg-black z-20"
                   />
                 )}
 
@@ -198,3 +198,4 @@ export default function ClientSpotlight({ onOpenProject }: ClientSpotlightProps)
     </section>
   );
 }
+

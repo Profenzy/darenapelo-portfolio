@@ -40,7 +40,7 @@ export default function Navbar() {
               DAREN P. APELO
             </span>
             <span className="text-[10px] font-mono tracking-widest text-[#8d8b86] uppercase flex items-center gap-1.5">
-              <span>FINANCIAL MARKETING</span>
+              <span>FINANCIAL MANAGEMENT</span>
               <span className="text-gold">&bull;</span>
               <span>VIDEO EDITOR</span>
             </span>
@@ -118,3 +118,4 @@ export default function Navbar() {
     </header>
   );
 }
+

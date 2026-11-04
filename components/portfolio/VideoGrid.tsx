@@ -3,13 +3,13 @@
 import React, { useState, useMemo, useRef } from "react";
 import Image from "next/image";
 import { PROJECTS, Project } from "@/data/projects";
-import { Play, Volume2, VolumeX, Maximize2, Sparkles, Filter, Clock, Globe, Film } from "lucide-react";
+import { Play, Volume2, VolumeX, Maximize2, Sparkles, Filter, Clock, Globe, Film, Smartphone, Monitor } from "lucide-react";
 
 interface VideoGridProps {
   onSelectProject: (project: Project) => void;
 }
 
-type FilterCategory = "All" | "AMVs" | "LONG FORMS" | "SHORT FORMS" | "CRYPTO";
+type FilterCategory = "All" | "LONG FORMS" | "SHORT FORMS" | "AMVs" | "CRYPTO";
 
 export default function VideoGrid({ onSelectProject }: VideoGridProps) {
   const [activeFilter, setActiveFilter] = useState<FilterCategory>("All");
@@ -21,19 +21,19 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
   const filterTabs: { label: string; value: FilterCategory; count: number }[] = [
     { label: "All Projects", value: "All", count: PROJECTS.length },
     {
-      label: "AMV's (Anime)",
-      value: "AMVs",
-      count: PROJECTS.filter((p) => p.category === "AMVs").length,
-    },
-    {
-      label: "Long Forms",
+      label: "Long Forms (16:9)",
       value: "LONG FORMS",
       count: PROJECTS.filter((p) => p.category === "LONG FORMS").length,
     },
     {
-      label: "Short Forms",
+      label: "Short Forms (9:16)",
       value: "SHORT FORMS",
       count: PROJECTS.filter((p) => p.category === "SHORT FORMS").length,
+    },
+    {
+      label: "AMV's (Anime)",
+      value: "AMVs",
+      count: PROJECTS.filter((p) => p.category === "AMVs").length,
     },
     {
       label: "Crypto & Web3",
@@ -56,7 +56,6 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
       vid.pause();
       setPlayingVideoId(null);
     } else {
-      // Pause any previously playing video
       if (playingVideoId && videoRefs.current[playingVideoId]) {
         videoRefs.current[playingVideoId]?.pause();
       }
@@ -75,7 +74,7 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
   };
 
   return (
-    <section id="vault" className="relative py-24 sm:py-32 bg-[#0a0a0b] border-t border-[#1a1a1e]">
+    <section id="vault" className="relative py-20 sm:py-32 bg-[#0a0a0b] border-t border-[#1a1a1e]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
@@ -88,8 +87,8 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
               Filterable <span className="gold-gradient-text">Video Vault</span>
             </h2>
           </div>
-          <p className="max-w-md text-sm text-[#8d8b86]">
-            Every asset is edited with intentional retention curves, custom sound design, dynamic typography, and platform-specific pacing.
+          <p className="max-w-md text-xs sm:text-sm text-[#8d8b86]">
+            Every asset is delivered in its native aspect ratio. Engineered for high watch time, retention curves, custom sound design, and viral audience conversion.
           </p>
         </div>
 
@@ -121,27 +120,34 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
         </div>
 
         {/* Video Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
           {filteredProjects.map((project) => {
             const isPlaying = playingVideoId === project.id;
             const isMuted = mutedVideoId === project.id || (playingVideoId !== project.id);
+            const isVertical = project.aspectRatio === "9:16";
 
             return (
               <div
                 key={project.id}
                 onClick={() => onSelectProject(project)}
-                className="group relative flex flex-col rounded-2xl bg-[#121214] border border-[#27272a] hover:border-gold/60 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-[0_20px_45px_rgba(212,175,55,0.12)] hover:-translate-y-1.5"
+                className="group relative flex flex-col rounded-2xl bg-[#121214] border border-[#27272a] hover:border-gold/60 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-[0_20px_45px_rgba(212,175,55,0.12)] hover:-translate-y-1"
               >
-                {/* Media Container (16:9 for long forms, taller 4:5 or 16:9 responsive frame) */}
-                <div className="relative w-full aspect-[16/10] bg-[#0d0d0f] overflow-hidden">
+                {/* Media Container: strict aspect ratio without stretching! */}
+                <div
+                  className={`relative w-full bg-black overflow-hidden flex items-center justify-center ${
+                    isVertical ? "aspect-[9/16] max-h-[460px]" : "aspect-[16/9]"
+                  }`}
+                >
                   {/* Poster Thumbnail */}
                   <Image
                     src={project.posterSrc}
                     alt={project.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className={`object-cover transition-all duration-700 ${
-                      isPlaying ? "opacity-0 pointer-events-none" : "opacity-80 group-hover:opacity-100 group-hover:scale-105"
+                    className={`transition-all duration-700 ${
+                      isVertical ? "object-cover" : "object-contain bg-black"
+                    } ${
+                      isPlaying ? "opacity-0 pointer-events-none" : "opacity-90 group-hover:opacity-100 group-hover:scale-105"
                     }`}
                   />
 
@@ -156,28 +162,31 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
                       playsInline
                       muted={isMuted}
                       preload="metadata"
-                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                      className={`absolute inset-0 w-full h-full ${
+                        isVertical ? "object-cover" : "object-contain"
+                      } transition-opacity duration-300 ${
                         isPlaying ? "opacity-100" : "opacity-0 pointer-events-none"
                       }`}
                     />
                   )}
 
-                  {/* Gradient bottom shadow */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#121214] via-transparent to-black/30 pointer-events-none" />
+                  {/* Gradient overlays */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#121214] via-transparent to-black/40 pointer-events-none" />
 
                   {/* Top Badge Overlay */}
-                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-                    <span className="px-2.5 py-1 rounded-md bg-[#0a0a0b]/80 border border-white/10 text-[10px] font-mono tracking-wider text-gold uppercase backdrop-blur-md">
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none z-10">
+                    <span className="px-2.5 py-1 rounded-md bg-[#0a0a0b]/85 border border-white/10 text-[10px] font-mono tracking-wider text-gold uppercase backdrop-blur-md flex items-center gap-1">
+                      {isVertical ? <Smartphone className="w-3 h-3 text-gold" /> : <Monitor className="w-3 h-3 text-gold" />}
                       {project.categoryLabel}
                     </span>
-                    <span className="px-2.5 py-1 rounded-md bg-[#0a0a0b]/80 border border-white/10 text-[10px] font-mono tracking-wider text-[#f4f1ea] uppercase backdrop-blur-md flex items-center gap-1">
+                    <span className="px-2.5 py-1 rounded-md bg-[#0a0a0b]/85 border border-white/10 text-[10px] font-mono tracking-wider text-[#f4f1ea] uppercase backdrop-blur-md flex items-center gap-1">
                       <Clock className="w-3 h-3 text-gold" />
                       {project.runtime}
                     </span>
                   </div>
 
                   {/* Center Play Button Overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
                     <div
                       className={`w-14 h-14 rounded-full bg-gold/90 text-[#0a0a0b] flex items-center justify-center shadow-2xl transition-all duration-300 ${
                         isPlaying
@@ -189,9 +198,9 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
                     </div>
                   </div>
 
-                  {/* Video In-Card Controls */}
+                  {/* In-Card Video Quick Controls */}
                   {project.videoSrc && (
-                    <div className="absolute bottom-3 right-3 flex items-center gap-2 z-10">
+                    <div className="absolute bottom-3 right-3 flex items-center gap-2 z-20">
                       <button
                         onClick={(e) => togglePlay(project.id, e)}
                         className="p-2 rounded-full bg-[#0a0a0b]/80 border border-white/10 text-gold hover:text-white backdrop-blur-md transition-colors"
@@ -217,7 +226,7 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
 
                   {/* Retention Metric Tag if available */}
                   {project.retentionMetric && (
-                    <div className="absolute bottom-3 left-3 pointer-events-none">
+                    <div className="absolute bottom-3 left-3 pointer-events-none z-10">
                       <span className="px-2.5 py-1 rounded-md bg-gold/20 border border-gold/40 text-[10px] font-mono text-gold-light uppercase backdrop-blur-md flex items-center gap-1.5">
                         <Sparkles className="w-3 h-3 text-gold" />
                         {project.retentionMetric}
@@ -226,11 +235,10 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
                   )}
                 </div>
 
-                {/* Card Content & Badges */}
+                {/* Card Meta & Breakdown */}
                 <div className="p-5 flex-1 flex flex-col justify-between">
                   <div>
-                    {/* Detail Badges: Language, Platform, Primary Focus */}
-                    <div className="flex flex-wrap items-center gap-2 mb-3">
+                    <div className="flex flex-wrap items-center gap-2 mb-2.5">
                       <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-[#1a1a1e] text-[#c8c5bc] border border-[#27272a]">
                         <Globe className="w-2.5 h-2.5 text-gold" />
                         {project.language}

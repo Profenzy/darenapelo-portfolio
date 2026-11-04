@@ -3,13 +3,13 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://darenapelo.com"),
-  title: "Daren P. Apelo | Financial Marketing & High-Retention Video Editor",
+  title: "Daren P. Apelo | Financial Management & High-Retention Video Editor",
   description:
-    "Portfolio of Daren P. Apelo — Financial Marketing Graduate & Video Editor specializing in high-retention English/Spanish cuts, AMVs, YouTube long-forms, and viral short-form assets.",
+    "Portfolio of Daren P. Apelo — Financial Management Graduate & Video Editor specializing in high-retention English/Spanish cuts, AMVs, YouTube long-forms, and viral short-form assets.",
   keywords: [
     "Daren P. Apelo",
     "Video Editor",
-    "Financial Marketing",
+    "Financial Management",
     "High Retention Video Editing",
     "AMV Editor",
     "Bilingual Video Editor",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Daren P. Apelo" }],
   openGraph: {
     title: "Daren P. Apelo | High-Retention Video Editor",
-    description: "Financial marketing strategy meets cinematic, high-retention editing.",
+    description: "Financial management strategy meets cinematic, high-retention editing.",
     type: "website",
     locale: "en_US",
     images: [
