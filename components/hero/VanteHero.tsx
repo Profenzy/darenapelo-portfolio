@@ -13,10 +13,8 @@ import {
   ChevronRight,
   Sparkles,
   Maximize2,
-  Clock,
   ArrowRight,
   ShieldCheck,
-  Zap,
 } from "lucide-react";
 
 interface VanteHeroProps {
@@ -41,14 +39,14 @@ export default function VanteHero({ onSelectProject }: VanteHeroProps) {
     if (activeTab === "longforms") {
       return PROJECTS.filter((p) => p.aspectRatio === "16:9");
     }
-    // Featured mix: top shorts and top longforms
+    // Featured mix: authentic 16:9 long forms and 9:16 vertical reels
     return [
-      PROJECTS.find((p) => p.id === "short-5-questions") || PROJECTS[0],
-      PROJECTS.find((p) => p.id === "long-freddy-money") || PROJECTS[1],
-      PROJECTS.find((p) => p.id === "amv-pacing-vfx") || PROJECTS[2],
-      PROJECTS.find((p) => p.id === "long-kristen-oja") || PROJECTS[3],
-      PROJECTS.find((p) => p.id === "short-output-cut") || PROJECTS[4],
-      PROJECTS.find((p) => p.id === "long-laloba") || PROJECTS[5],
+      PROJECTS.find((p) => p.id === "long-freddy-money") || PROJECTS[0],
+      PROJECTS.find((p) => p.id === "short-5-questions") || PROJECTS[1],
+      PROJECTS.find((p) => p.id === "long-laloba") || PROJECTS[2],
+      PROJECTS.find((p) => p.id === "short-spanish-educacion") || PROJECTS[3],
+      PROJECTS.find((p) => p.id === "amv-pacing-vfx") || PROJECTS[4],
+      PROJECTS.find((p) => p.id === "long-kristen-oja") || PROJECTS[5],
     ];
   }, [activeTab]);
 
@@ -177,11 +175,9 @@ export default function VanteHero({ onSelectProject }: VanteHeroProps) {
     const animate = () => {
       const elapsed = clock.getElapsedTime();
 
-      // Gentle wave in particles and line
       particles.rotation.y = elapsed * 0.03;
       line.rotation.z = Math.sin(elapsed * 0.2) * 0.05;
 
-      // Camera parallax interpolation
       camera.position.x += (targetX - camera.position.x) * 0.05;
       camera.position.y += (-targetY - camera.position.y) * 0.05;
       camera.lookAt(0, 0, 0);
@@ -291,27 +287,18 @@ export default function VanteHero({ onSelectProject }: VanteHeroProps) {
                   <div className="w-8 h-1 bg-white/20 rounded-full" />
                 </div>
 
-                {/* Video Container (Strictly aspect 9:16, object-contain/cover without distortion) */}
+                {/* Video Container (Native vertical resolution, no confusing photo thumbnails!) */}
                 <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-black flex items-center justify-center">
-                  {currentProject.videoSrc ? (
-                    <video
-                      ref={videoRef}
-                      src={currentProject.videoSrc}
-                      autoPlay
-                      playsInline
-                      loop
-                      muted={isMuted}
-                      className="w-full h-full object-cover cursor-pointer"
-                      onClick={togglePlay}
-                    />
-                  ) : (
-                    <Image
-                      src={currentProject.posterSrc}
-                      alt={currentProject.title}
-                      fill
-                      className="object-cover"
-                    />
-                  )}
+                  <video
+                    ref={videoRef}
+                    src={`${currentProject.videoSrc}#t=0.001`}
+                    autoPlay
+                    playsInline
+                    loop
+                    muted={isMuted}
+                    className="w-full h-full object-cover cursor-pointer"
+                    onClick={togglePlay}
+                  />
 
                   {/* Gradient overlays */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
@@ -341,28 +328,19 @@ export default function VanteHero({ onSelectProject }: VanteHeroProps) {
                 </div>
               </div>
             ) : (
-              /* True 16:9 Widescreen Masterclass Frame */
+              /* True 16:9 Widescreen Masterclass Frame (Plays Authentic 16:9 Long Form Videos!) */
               <div className="relative w-full max-w-2xl aspect-[16/9] rounded-3xl bg-[#121214] border-2 border-gold/40 shadow-[0_20px_60px_rgba(212,175,55,0.18)] p-2.5 overflow-hidden group transition-all duration-500">
                 <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black flex items-center justify-center">
-                  {currentProject.videoSrc ? (
-                    <video
-                      ref={videoRef}
-                      src={currentProject.videoSrc}
-                      autoPlay
-                      playsInline
-                      loop
-                      muted={isMuted}
-                      className="w-full h-full object-contain cursor-pointer"
-                      onClick={togglePlay}
-                    />
-                  ) : (
-                    <Image
-                      src={currentProject.posterSrc}
-                      alt={currentProject.title}
-                      fill
-                      className="object-cover"
-                    />
-                  )}
+                  <video
+                    ref={videoRef}
+                    src={`${currentProject.videoSrc}#t=0.001`}
+                    autoPlay
+                    playsInline
+                    loop
+                    muted={isMuted}
+                    className="w-full h-full object-contain cursor-pointer"
+                    onClick={togglePlay}
+                  />
 
                   {/* Gradient bottom shadow */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />

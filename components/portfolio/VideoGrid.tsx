@@ -3,13 +3,13 @@
 import React, { useState, useMemo, useRef } from "react";
 import Image from "next/image";
 import { PROJECTS, Project } from "@/data/projects";
-import { Play, Volume2, VolumeX, Maximize2, Sparkles, Filter, Clock, Globe, Film, Smartphone, Monitor } from "lucide-react";
+import { Play, Volume2, VolumeX, Maximize2, Sparkles, Clock, Globe, Film, Smartphone, Monitor } from "lucide-react";
 
 interface VideoGridProps {
   onSelectProject: (project: Project) => void;
 }
 
-type FilterCategory = "All" | "LONG FORMS" | "SHORT FORMS" | "AMVs" | "CRYPTO";
+type FilterCategory = "All" | "LONG FORMS" | "SHORT FORMS" | "AMVs";
 
 export default function VideoGrid({ onSelectProject }: VideoGridProps) {
   const [activeFilter, setActiveFilter] = useState<FilterCategory>("All");
@@ -34,11 +34,6 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
       label: "AMV's (Anime)",
       value: "AMVs",
       count: PROJECTS.filter((p) => p.category === "AMVs").length,
-    },
-    {
-      label: "Crypto & Web3",
-      value: "CRYPTO",
-      count: PROJECTS.filter((p) => p.category === "CRYPTO").length,
     },
   ];
 
@@ -88,7 +83,7 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
             </h2>
           </div>
           <p className="max-w-md text-xs sm:text-sm text-[#8d8b86]">
-            Every asset is delivered in its native aspect ratio. Engineered for high watch time, retention curves, custom sound design, and viral audience conversion.
+            Every asset is delivered in its true aspect ratio. Engineered for high watch time, retention curves, custom sound design, and viral audience conversion.
           </p>
         </div>
 
@@ -125,6 +120,7 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
             const isPlaying = playingVideoId === project.id;
             const isMuted = mutedVideoId === project.id || (playingVideoId !== project.id);
             const isVertical = project.aspectRatio === "9:16";
+            const hasSpecificPoster = Boolean(project.posterSrc);
 
             return (
               <div
@@ -132,43 +128,45 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
                 onClick={() => onSelectProject(project)}
                 className="group relative flex flex-col rounded-2xl bg-[#121214] border border-[#27272a] hover:border-gold/60 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-[0_20px_45px_rgba(212,175,55,0.12)] hover:-translate-y-1"
               >
-                {/* Media Container: strict aspect ratio without stretching! */}
+                {/* Media Container: Never stretched! */}
                 <div
                   className={`relative w-full bg-black overflow-hidden flex items-center justify-center ${
                     isVertical ? "aspect-[9/16] max-h-[460px]" : "aspect-[16/9]"
                   }`}
                 >
-                  {/* Poster Thumbnail */}
-                  <Image
-                    src={project.posterSrc}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className={`transition-all duration-700 ${
-                      isVertical ? "object-cover" : "object-contain bg-black"
-                    } ${
-                      isPlaying ? "opacity-0 pointer-events-none" : "opacity-90 group-hover:opacity-100 group-hover:scale-105"
-                    }`}
-                  />
-
-                  {/* HTML5 Video element */}
-                  {project.videoSrc && (
-                    <video
-                      ref={(el) => {
-                        videoRefs.current[project.id] = el;
-                      }}
-                      src={project.videoSrc}
-                      loop
-                      playsInline
-                      muted={isMuted}
-                      preload="metadata"
-                      className={`absolute inset-0 w-full h-full ${
-                        isVertical ? "object-cover" : "object-contain"
-                      } transition-opacity duration-300 ${
-                        isPlaying ? "opacity-100" : "opacity-0 pointer-events-none"
+                  {/* Poster Thumbnail ONLY if authentic specific thumbnail exists */}
+                  {hasSpecificPoster && (
+                    <Image
+                      src={project.posterSrc!}
+                      alt={project.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className={`transition-all duration-700 ${
+                        isVertical ? "object-cover" : "object-contain bg-black"
+                      } ${
+                        isPlaying ? "opacity-0 pointer-events-none" : "opacity-95 group-hover:opacity-100 group-hover:scale-105"
                       }`}
                     />
                   )}
+
+                  {/* HTML5 Video element: shows native video frame when poster is absent */}
+                  <video
+                    ref={(el) => {
+                      videoRefs.current[project.id] = el;
+                    }}
+                    src={`${project.videoSrc}#t=0.001`}
+                    loop
+                    playsInline
+                    muted={isMuted}
+                    preload="metadata"
+                    className={`w-full h-full ${
+                      isVertical ? "object-cover" : "object-contain bg-black"
+                    } ${
+                      hasSpecificPoster && !isPlaying
+                        ? "opacity-0 pointer-events-none"
+                        : "opacity-100"
+                    } transition-opacity duration-300`}
+                  />
 
                   {/* Gradient overlays */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[#121214] via-transparent to-black/40 pointer-events-none" />
@@ -199,30 +197,28 @@ export default function VideoGrid({ onSelectProject }: VideoGridProps) {
                   </div>
 
                   {/* In-Card Video Quick Controls */}
-                  {project.videoSrc && (
-                    <div className="absolute bottom-3 right-3 flex items-center gap-2 z-20">
+                  <div className="absolute bottom-3 right-3 flex items-center gap-2 z-20">
+                    <button
+                      onClick={(e) => togglePlay(project.id, e)}
+                      className="p-2 rounded-full bg-[#0a0a0b]/80 border border-white/10 text-gold hover:text-white backdrop-blur-md transition-colors"
+                      title={isPlaying ? "Pause preview" : "Play preview"}
+                    >
+                      <Play className={`w-3.5 h-3.5 ${isPlaying ? "fill-current" : ""}`} />
+                    </button>
+                    {isPlaying && (
                       <button
-                        onClick={(e) => togglePlay(project.id, e)}
+                        onClick={(e) => toggleMute(project.id, e)}
                         className="p-2 rounded-full bg-[#0a0a0b]/80 border border-white/10 text-gold hover:text-white backdrop-blur-md transition-colors"
-                        title={isPlaying ? "Pause preview" : "Play preview"}
+                        title={isMuted ? "Unmute" : "Mute"}
                       >
-                        <Play className={`w-3.5 h-3.5 ${isPlaying ? "fill-current" : ""}`} />
+                        {isMuted ? (
+                          <VolumeX className="w-3.5 h-3.5" />
+                        ) : (
+                          <Volume2 className="w-3.5 h-3.5" />
+                        )}
                       </button>
-                      {isPlaying && (
-                        <button
-                          onClick={(e) => toggleMute(project.id, e)}
-                          className="p-2 rounded-full bg-[#0a0a0b]/80 border border-white/10 text-gold hover:text-white backdrop-blur-md transition-colors"
-                          title={isMuted ? "Unmute" : "Mute"}
-                        >
-                          {isMuted ? (
-                            <VolumeX className="w-3.5 h-3.5" />
-                          ) : (
-                            <Volume2 className="w-3.5 h-3.5" />
-                          )}
-                        </button>
-                      )}
-                    </div>
-                  )}
+                    )}
+                  </div>
 
                   {/* Retention Metric Tag if available */}
                   {project.retentionMetric && (

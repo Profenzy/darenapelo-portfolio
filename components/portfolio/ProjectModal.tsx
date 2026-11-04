@@ -139,14 +139,14 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
                 onClick={togglePlay}
                 className="w-full h-full object-contain cursor-pointer"
               />
-            ) : (
+            ) : project.posterSrc ? (
               <Image
                 src={project.posterSrc}
                 alt={project.title}
                 fill
                 className="object-contain"
               />
-            )}
+            ) : null}
 
             {/* Hover overlay controls */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
