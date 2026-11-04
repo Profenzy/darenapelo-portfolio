@@ -34,19 +34,19 @@ export default function VanteHero({ onSelectProject }: VanteHeroProps) {
   // Select filtered subsets for the hero reel
   const heroProjects = React.useMemo(() => {
     if (activeTab === "shorts") {
-      return PROJECTS.filter((p) => p.aspectRatio === "9:16");
+      return PROJECTS.filter((p) => p.category === "SHORT FORMS");
     }
     if (activeTab === "longforms") {
-      return PROJECTS.filter((p) => p.aspectRatio === "16:9");
+      return PROJECTS.filter((p) => p.category === "LONG FORMS");
     }
-    // Featured mix: authentic 16:9 long forms and 9:16 vertical reels
+    // Featured mix: authentic 16:9 long forms, real anime edits, and 9:16 vertical reels
     return [
       PROJECTS.find((p) => p.id === "long-freddy-money") || PROJECTS[0],
-      PROJECTS.find((p) => p.id === "short-5-questions") || PROJECTS[1],
-      PROJECTS.find((p) => p.id === "long-laloba") || PROJECTS[2],
-      PROJECTS.find((p) => p.id === "short-spanish-educacion") || PROJECTS[3],
-      PROJECTS.find((p) => p.id === "amv-pacing-vfx") || PROJECTS[4],
-      PROJECTS.find((p) => p.id === "long-kristen-oja") || PROJECTS[5],
+      PROJECTS.find((p) => p.id === "amv-01") || PROJECTS[1],
+      PROJECTS.find((p) => p.id === "short-5-questions") || PROJECTS[2],
+      PROJECTS.find((p) => p.id === "long-laloba") || PROJECTS[3],
+      PROJECTS.find((p) => p.id === "amv-02") || PROJECTS[4],
+      PROJECTS.find((p) => p.id === "short-spanish-educacion") || PROJECTS[5],
     ];
   }, [activeTab]);
 

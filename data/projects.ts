@@ -5,7 +5,7 @@ export interface Project {
   category: "LONG FORMS" | "SHORT FORMS" | "AMVs";
   categoryLabel: string;
   videoSrc: string;
-  posterSrc?: string; // Optional: Only set when an authentic thumbnail exists!
+  posterSrc?: string; // Only provided when an authentic specific thumbnail exists!
   runtime: string;
   language: "EN" | "ES" | "EN / ES";
   platform: "YouTube" | "TikTok" | "Instagram Reels" | "Facebook" | "Webinar / Course";
@@ -20,7 +20,7 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   // ==========================================
-  // LONG FORMS (16:9) - Authentic 16:9 Widescreen Videos & Proper Thumbnails
+  // LONG FORMS (16:9) - Authentic 16:9 Masterclasses & Dedicated Thumbnails
   // ==========================================
   {
     id: "long-freddy-money",
@@ -144,6 +144,103 @@ export const PROJECTS: Project[] = [
   },
 
   // ==========================================
+  // AMVs (ANIME EDIT) - Authentic Anime Videos (a.mp4, aa.mp4, aaa.mp4, aaaa.mp4)
+  // ==========================================
+  {
+    id: "amv-01",
+    title: "Anime Sync & Dynamic VFX Cut",
+    subtitle: "Beat synchronicity, optical transitions & speed ramping",
+    category: "AMVs",
+    categoryLabel: "AMV's (Anime)",
+    videoSrc: "/videos/amvs/amv-01.mp4",
+    // No third-party poster -> shows video's own first frame!
+    runtime: "0:20",
+    language: "EN",
+    platform: "TikTok",
+    primaryFocus: "Sound Design & VFX",
+    retentionMetric: "84.2% Completion Rate",
+    client: "AMV Network",
+    description:
+      "Fast-paced anime edit engineered with micro-cuts, frame blending, and custom SFX risers. Synchronized frame-by-frame using Alight Motion to maximize visual dopamine and replay loops.",
+    strategyNotes: [
+      "Audio transients mapped to impact frames and chromatic aberration spikes",
+      "Infinite loop structure designed to prompt automatic repeat plays",
+      "Velocity curve interpolation for dynamic speed ramps without stutter"
+    ],
+    deliverables: ["720p 60FPS Master Cut", "Vertical 9:16 Re-frame", "Sound Design Audio Stem"],
+    aspectRatio: "16:9",
+  },
+  {
+    id: "amv-02",
+    title: "Anime Flow & Optical Motion Sync",
+    subtitle: "Layered optical flow, velocity curves & beat alignment",
+    category: "AMVs",
+    categoryLabel: "AMV's (Anime)",
+    videoSrc: "/videos/amvs/amv-02.mp4",
+    runtime: "0:18",
+    language: "EN",
+    platform: "TikTok",
+    primaryFocus: "Sound Design & VFX",
+    retentionMetric: "82.4% Completion Rate",
+    client: "AMV Showcase",
+    description:
+      "A tribute to precision editing: camera shake simulations, custom sound synthesis, and velocity map synchronizations designed for peak aesthetic satisfaction.",
+    strategyNotes: [
+      "Layered optical sound effects matched precisely with action impacts",
+      "Custom glow shaders applied to character eyes and neon signs",
+      "Rhythm-driven cut points aligned with bass drops"
+    ],
+    deliverables: ["HQ MP4 Master", "WAV Audio Mix", "Color Grade LUTs"],
+    aspectRatio: "16:9",
+  },
+  {
+    id: "amv-03",
+    title: "Anime Velocity Curves & Beat Transitions",
+    subtitle: "Kinetic visual pacing, audio stems & atmospheric sound design",
+    category: "AMVs",
+    categoryLabel: "AMV's (Anime)",
+    videoSrc: "/videos/amvs/amv-03.mp4",
+    runtime: "0:22",
+    language: "EN",
+    platform: "Instagram Reels",
+    primaryFocus: "Sound Design & VFX",
+    retentionMetric: "86.1% Replay Rate",
+    client: "AMV Creators",
+    description:
+      "High-tempo anime music edit featuring sub-frame cuts, whip pans, and impact flash frames calibrated to driving synth rhythms.",
+    strategyNotes: [
+      "Sub-frame flash frames accentuating musical drops",
+      "Smooth motion blur interpolation during quick pans",
+      "Enhanced bass response on combat impacts"
+    ],
+    deliverables: ["Master Cut 16:9", "Audio Stems", "Vertical Crop"],
+    aspectRatio: "16:9",
+  },
+  {
+    id: "amv-04",
+    title: "Anime Action Sequences & Sound Design",
+    subtitle: "Climactic battle pacing, rotoscoped glow & speed ramps",
+    category: "AMVs",
+    categoryLabel: "AMV's (Anime)",
+    videoSrc: "/videos/amvs/amv-04.mp4",
+    runtime: "0:24",
+    language: "EN",
+    platform: "TikTok",
+    primaryFocus: "Sound Design & VFX",
+    retentionMetric: "88.7% Watch-Through",
+    client: "Motion Showcase",
+    description:
+      "Complex anime action sequence edited with precision speed ramping, custom wooshes, sword clashes, and atmospheric color grading.",
+    strategyNotes: [
+      "Multitrack sound design layered over raw anime audio stems",
+      "Pacing acceleration building into climactic finishing moves",
+      "Color grading boosting vibrancy without clipping highlights"
+    ],
+    deliverables: ["Master 720p 60FPS", "Sound Effects Track", "Social Teaser"],
+    aspectRatio: "16:9",
+  },
+
+  // ==========================================
   // SHORT FORMS (9:16) - Native Vertical Videos (No confusing third-party thumbnails!)
   // ==========================================
   {
@@ -153,7 +250,6 @@ export const PROJECTS: Project[] = [
     category: "SHORT FORMS",
     categoryLabel: "Short Forms (9:16)",
     videoSrc: "/videos/short-05.mp4",
-    // No thumbnail specified -> video player shows its own native first frame!
     runtime: "1:15",
     language: "EN",
     platform: "Instagram Reels",
@@ -306,56 +402,6 @@ export const PROJECTS: Project[] = [
       "Tactile sound design for subconscious engagement"
     ],
     deliverables: ["Vertical 9:16 Master", "Audio Stem", "Captioned Version"],
-    aspectRatio: "9:16",
-  },
-
-  // ==========================================
-  // AMVs (ANIME EDIT) - Authentic Anime Edits
-  // ==========================================
-  {
-    id: "amv-pacing-vfx",
-    title: "Anime Sync & Dynamic VFX Cut",
-    subtitle: "High-tempo beat synchronicity, optical flow & velocity mapping",
-    category: "AMVs",
-    categoryLabel: "AMV's (Anime)",
-    videoSrc: "/videos/amv-aa.mp4",
-    runtime: "0:35",
-    language: "EN",
-    platform: "TikTok",
-    primaryFocus: "Sound Design & VFX",
-    retentionMetric: "82.4% Completion Rate",
-    client: "AMV Creator Network",
-    description:
-      "Fast-paced anime edit engineered with micro-cuts, frame blending, and custom SFX risers. Synchronized frame-by-frame using Alight Motion to maximize visual dopamine and replay loops.",
-    strategyNotes: [
-      "Sub-frame audio transients mapped to impact frames and chromatic aberration spikes",
-      "Seamless infinite loop structure designed to prompt automatic repeat plays",
-      "Velocity curve interpolation for dynamic speed ramps without stutter"
-    ],
-    deliverables: ["4K 60FPS Master Cut", "Vertical 9:16 Re-frame", "Sound Design Audio Stem"],
-    aspectRatio: "9:16",
-  },
-  {
-    id: "amv-extended-cut",
-    title: "Anime Sync & Motion Graphics (Extended Cut)",
-    subtitle: "Layered optical flow, rotoscoped transitions & atmospheric sound design",
-    category: "AMVs",
-    categoryLabel: "AMV's (Anime)",
-    videoSrc: "/videos/short-aa.mp4",
-    runtime: "1:01",
-    language: "EN",
-    platform: "TikTok",
-    primaryFocus: "Sound Design & VFX",
-    retentionMetric: "79.6% Replay Rate",
-    client: "AMV Network",
-    description:
-      "A tribute to precision editing: rotoscoping, camera shake simulations, custom sound synthesis, and velocity map synchronizations designed for peak aesthetic satisfaction.",
-    strategyNotes: [
-      "Layered optical sound effects matched precisely with action impacts",
-      "Custom glow shaders applied to character eyes and neon signs",
-      "Rhythm-driven cut points aligned with bass drops"
-    ],
-    deliverables: ["Vertical Master (9:16)", "HQ WAV Audio Mix", "Color Grade LUTs"],
     aspectRatio: "9:16",
   },
 ];
