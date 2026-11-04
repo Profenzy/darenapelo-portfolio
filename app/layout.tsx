@@ -20,6 +20,13 @@ export const metadata: Metadata = {
     "Trixy Castro",
   ],
   authors: [{ name: "Daren P. Apelo" }],
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "Daren P. Apelo | High-Retention Video Editor",
     description: "Financial management strategy meets cinematic, high-retention editing.",
