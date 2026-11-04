@@ -79,14 +79,14 @@ export default function ClientSpotlight({ onOpenProject }: ClientSpotlightProps)
                 {/* Subtle vignette */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0b]/90 via-black/20 to-transparent pointer-events-none" />
 
-                {/* Live video layer if playing: Authentic 16:9 Sam Rockwell Video */}
+                {/* Live video layer if playing: Authentic 16:9 Sam Rockwell Video streamed via Google Drive */}
                 {isPlaying && (
-                  <video
-                    src="/videos/longforms/Sam%20Rockwell.mp4"
-                    autoPlay
-                    controls
-                    playsInline
-                    className="absolute inset-0 w-full h-full object-contain bg-black z-20"
+                  <iframe
+                    src="https://drive.google.com/file/d/1npmTomPhm89YZnAWRxjChHCXyn6m7l9F/preview"
+                    allow="autoplay; fullscreen"
+                    allowFullScreen
+                    className="absolute inset-0 w-full h-full border-0 rounded-2xl bg-black z-20"
+                    title="Sam Rockwell Real Estate Masterclass"
                   />
                 )}
 

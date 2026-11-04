@@ -4,7 +4,9 @@ export interface Project {
   subtitle: string;
   category: "LONG FORMS" | "SHORT FORMS" | "AMVs";
   categoryLabel: string;
-  videoSrc: string;
+  videoSrc?: string;
+  driveEmbedUrl?: string; // Google Drive embed streamable URL (/preview)
+  driveShareUrl?: string; // Original Google Drive view link
   posterSrc?: string; // Only provided when an authentic specific thumbnail exists!
   runtime: string;
   language: "EN" | "ES" | "EN / ES";
@@ -20,7 +22,7 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   // ==========================================
-  // LONG FORMS (16:9) - Authentic 16:9 Masterclasses & Dedicated Thumbnails
+  // LONG FORMS (16:9) - Powered by Google Drive Streaming & High-Res Thumbnails
   // ==========================================
   {
     id: "long-freddy-money",
@@ -28,7 +30,8 @@ export const PROJECTS: Project[] = [
     subtitle: "High-production YouTube masterclass with structured financial retention",
     category: "LONG FORMS",
     categoryLabel: "Long Forms (16:9)",
-    videoSrc: "/videos/longforms/Freddy%20Money.mp4",
+    driveEmbedUrl: "https://drive.google.com/file/d/1AIP8iypv4Qma2OS2T58ajN1EBvxSITgw/preview",
+    driveShareUrl: "https://drive.google.com/file/d/1AIP8iypv4Qma2OS2T58ajN1EBvxSITgw/view?usp=drive_link",
     posterSrc: "/thumbnails/freddy-money.png",
     runtime: "16:45",
     language: "EN",
@@ -52,7 +55,8 @@ export const PROJECTS: Project[] = [
     subtitle: "Documentary-grade interview pacing & visual narrative retention",
     category: "LONG FORMS",
     categoryLabel: "Long Forms (16:9)",
-    videoSrc: "/videos/longforms/Kristen%20Oja.mp4",
+    driveEmbedUrl: "https://drive.google.com/file/d/1bCuK7UM7bf3AXF9FrgLW9dPXmv7f1Q21/preview",
+    driveShareUrl: "https://drive.google.com/file/d/1bCuK7UM7bf3AXF9FrgLW9dPXmv7f1Q21/view?usp=sharing",
     posterSrc: "/thumbnails/kristen-oja.png",
     runtime: "21:10",
     language: "EN",
@@ -76,7 +80,8 @@ export const PROJECTS: Project[] = [
     subtitle: "Bilingual Spanish long-form documentary with cinematic color and pacing",
     category: "LONG FORMS",
     categoryLabel: "Long Forms (16:9)",
-    videoSrc: "/videos/longforms/LaLoba.mp4",
+    driveEmbedUrl: "https://drive.google.com/file/d/1ak1bQx5OKG7FhUMe0XNAZLEOaK8MdIJJ/preview",
+    driveShareUrl: "https://drive.google.com/file/d/1ak1bQx5OKG7FhUMe0XNAZLEOaK8MdIJJ/view?usp=drive_link",
     posterSrc: "/thumbnails/laloba.png",
     runtime: "18:30",
     language: "ES",
@@ -100,7 +105,8 @@ export const PROJECTS: Project[] = [
     subtitle: "Financial management principles applied to high-ticket real estate",
     category: "LONG FORMS",
     categoryLabel: "Long Forms (16:9)",
-    videoSrc: "/videos/longforms/Sam%20Rockwell.mp4",
+    driveEmbedUrl: "https://drive.google.com/file/d/1npmTomPhm89YZnAWRxjChHCXyn6m7l9F/preview",
+    driveShareUrl: "https://drive.google.com/file/d/1npmTomPhm89YZnAWRxjChHCXyn6m7l9F/view?usp=sharing",
     posterSrc: "/thumbnails/sam-rockwell.png",
     runtime: "14:15",
     language: "EN",
@@ -124,7 +130,8 @@ export const PROJECTS: Project[] = [
     subtitle: "Documentary interview showcasing brand scaling and visual identity",
     category: "LONG FORMS",
     categoryLabel: "Long Forms (16:9)",
-    videoSrc: "/videos/longforms/Yaritza.mp4",
+    driveEmbedUrl: "https://drive.google.com/file/d/1jNiAnhGxXKJ0XoK3iF86PGdhAhUlFlpD/preview",
+    driveShareUrl: "https://drive.google.com/file/d/1jNiAnhGxXKJ0XoK3iF86PGdhAhUlFlpD/view?usp=drive_link",
     posterSrc: "/thumbnails/yaritza.png",
     runtime: "19:40",
     language: "EN / ES",
@@ -153,7 +160,6 @@ export const PROJECTS: Project[] = [
     category: "AMVs",
     categoryLabel: "AMV's (Anime)",
     videoSrc: "/videos/amvs/amv-01.mp4",
-    // No third-party poster -> shows video's own first frame!
     runtime: "0:20",
     language: "EN",
     platform: "TikTok",
@@ -241,7 +247,7 @@ export const PROJECTS: Project[] = [
   },
 
   // ==========================================
-  // SHORT FORMS (9:16) - Native Vertical Videos (No confusing third-party thumbnails!)
+  // SHORT FORMS (9:16) - Native Vertical Videos
   // ==========================================
   {
     id: "short-5-questions",

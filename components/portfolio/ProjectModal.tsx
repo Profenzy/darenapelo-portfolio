@@ -17,6 +17,7 @@ import {
   ArrowRight,
   Smartphone,
   Monitor,
+  ExternalLink,
 } from "lucide-react";
 
 interface ProjectModalProps {
@@ -57,6 +58,7 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
   if (!project) return null;
 
   const isVertical = project.aspectRatio === "9:16";
+  const isDriveStream = Boolean(project.driveEmbedUrl);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -118,27 +120,84 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
           <X className="w-5 h-5" />
         </button>
 
-        {/* Video Player Header Stage (Fit to True Aspect Ratio, Zero Stretching!) */}
-        <div className="relative w-full bg-[#080809] p-4 sm:p-6 overflow-hidden flex items-center justify-center border-b border-[#1a1a1e]">
+        {/* Video Player Header Stage */}
+        <div className="relative w-full bg-[#080809] p-3 sm:p-6 overflow-hidden flex items-center justify-center border-b border-[#1a1a1e]">
           <div
             className={`relative overflow-hidden rounded-2xl bg-black flex items-center justify-center shadow-2xl group ${
               isVertical
                 ? "w-[260px] sm:w-[300px] aspect-[9/16] max-h-[62vh]"
-                : "w-full max-w-3xl aspect-[16/9]"
+                : "w-full max-w-4xl aspect-[16/9]"
             }`}
           >
-            {project.videoSrc ? (
-              <video
-                ref={videoRef}
-                src={project.videoSrc}
-                autoPlay
-                playsInline
-                loop
-                muted={isMuted}
-                onTimeUpdate={handleTimeUpdate}
-                onClick={togglePlay}
-                className="w-full h-full object-contain cursor-pointer"
+            {/* 1. Google Drive Streaming Player for Long Forms */}
+            {isDriveStream ? (
+              <iframe
+                src={project.driveEmbedUrl}
+                allow="autoplay; fullscreen"
+                allowFullScreen
+                className="w-full h-full border-0 rounded-2xl bg-black"
+                title={project.title}
               />
+            ) : project.videoSrc ? (
+              /* 2. HTML5 Video Player for Short Forms & AMVs */
+              <>
+                <video
+                  ref={videoRef}
+                  src={project.videoSrc}
+                  autoPlay
+                  playsInline
+                  loop
+                  muted={isMuted}
+                  onTimeUpdate={handleTimeUpdate}
+                  onClick={togglePlay}
+                  className="w-full h-full object-contain cursor-pointer"
+                />
+
+                {/* Hover overlay controls */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+
+                {/* In-Frame Controls Bar */}
+                <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 flex flex-col gap-2 z-20">
+                  <div
+                    onClick={handleSeek}
+                    className="w-full h-1.5 bg-white/20 hover:h-2.5 rounded-full cursor-pointer relative transition-all group/bar"
+                  >
+                    <div
+                      className="h-full bg-gradient-to-r from-gold to-gold-light rounded-full relative"
+                      style={{ width: `${progress}%` }}
+                    >
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#f4f1ea] shadow-md scale-0 group-hover/bar:scale-100 transition-transform" />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs font-mono text-[#f4f1ea]">
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={togglePlay}
+                        className="p-1.5 rounded-full bg-white/10 hover:bg-gold hover:text-black transition-colors"
+                      >
+                        {isPlaying ? <Pause className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+                      </button>
+                      <button
+                        onClick={toggleMute}
+                        className="p-1.5 rounded-full bg-white/10 hover:bg-gold hover:text-black transition-colors"
+                      >
+                        {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                      </button>
+                      <span className="text-[11px] text-[#8d8b86]">
+                        {currentTime} / {duration !== "0:00" ? duration : project.runtime}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={handleFullScreen}
+                      className="p-1.5 rounded-full bg-white/10 hover:bg-gold hover:text-black transition-colors"
+                    >
+                      <Maximize className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </>
             ) : project.posterSrc ? (
               <Image
                 src={project.posterSrc}
@@ -147,51 +206,6 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
                 className="object-contain"
               />
             ) : null}
-
-            {/* Hover overlay controls */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-
-            {/* In-Frame Controls Bar */}
-            <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 flex flex-col gap-2 z-20">
-              <div
-                onClick={handleSeek}
-                className="w-full h-1.5 bg-white/20 hover:h-2.5 rounded-full cursor-pointer relative transition-all group/bar"
-              >
-                <div
-                  className="h-full bg-gradient-to-r from-gold to-gold-light rounded-full relative"
-                  style={{ width: `${progress}%` }}
-                >
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-[#f4f1ea] shadow-md scale-0 group-hover/bar:scale-100 transition-transform" />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between text-xs font-mono text-[#f4f1ea]">
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={togglePlay}
-                    className="p-1.5 rounded-full bg-white/10 hover:bg-gold hover:text-black transition-colors"
-                  >
-                    {isPlaying ? <Pause className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current" />}
-                  </button>
-                  <button
-                    onClick={toggleMute}
-                    className="p-1.5 rounded-full bg-white/10 hover:bg-gold hover:text-black transition-colors"
-                  >
-                    {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-                  </button>
-                  <span className="text-[11px] text-[#8d8b86]">
-                    {currentTime} / {duration !== "0:00" ? duration : project.runtime}
-                  </span>
-                </div>
-
-                <button
-                  onClick={handleFullScreen}
-                  className="p-1.5 rounded-full bg-white/10 hover:bg-gold hover:text-black transition-colors"
-                >
-                  <Maximize className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -294,7 +308,20 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-[#27272a]">
+              {/* Direct Google Drive Link if available */}
+              {project.driveShareUrl && (
+                <a
+                  href={project.driveShareUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#1a1a1e] border border-gold/40 text-gold hover:bg-gold hover:text-black font-mono text-xs uppercase tracking-wider transition-all"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Open Master in Google Drive</span>
+                </a>
+              )}
+
+              <div className="pt-2 border-t border-[#27272a]">
                 <button
                   onClick={() => {
                     onClose();

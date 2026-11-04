@@ -328,45 +328,45 @@ export default function VanteHero({ onSelectProject }: VanteHeroProps) {
                 </div>
               </div>
             ) : (
-              /* True 16:9 Widescreen Masterclass Frame (Plays Authentic 16:9 Long Form Videos!) */
+              /* True 16:9 Widescreen Masterclass Frame (Streams via Google Drive or Local Video) */
               <div className="relative w-full max-w-2xl aspect-[16/9] rounded-3xl bg-[#121214] border-2 border-gold/40 shadow-[0_20px_60px_rgba(212,175,55,0.18)] p-2.5 overflow-hidden group transition-all duration-500">
                 <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black flex items-center justify-center">
-                  <video
-                    ref={videoRef}
-                    src={`${currentProject.videoSrc}#t=0.001`}
-                    autoPlay
-                    playsInline
-                    loop
-                    muted={isMuted}
-                    className="w-full h-full object-contain cursor-pointer"
-                    onClick={togglePlay}
-                  />
-
-                  {/* Gradient bottom shadow */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
-
-                  {/* Overlay Controls */}
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-20">
-                    <button
-                      onClick={togglePlay}
-                      className="p-2.5 rounded-full bg-[#0a0a0b]/80 border border-white/20 text-gold hover:text-white backdrop-blur-md transition-colors"
-                      aria-label="Play/Pause"
-                    >
-                      {isPlaying ? (
-                        <Pause className="w-4 h-4 fill-current" />
-                      ) : (
-                        <Play className="w-4 h-4 fill-current translate-x-0.5" />
+                  {currentProject.driveEmbedUrl ? (
+                    <div className="relative w-full h-full cursor-pointer group/drive" onClick={() => onSelectProject && onSelectProject(currentProject)}>
+                      {currentProject.posterSrc && (
+                        <Image
+                          src={currentProject.posterSrc}
+                          alt={currentProject.title}
+                          fill
+                          className="object-contain"
+                        />
                       )}
-                    </button>
-
-                    <button
-                      onClick={toggleMute}
-                      className="p-2.5 rounded-full bg-[#0a0a0b]/80 border border-white/20 text-gold hover:text-white backdrop-blur-md transition-colors"
-                      aria-label="Mute/Unmute"
-                    >
-                      {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                    </button>
-                  </div>
+                      <div className="absolute inset-0 bg-black/40 group-hover/drive:bg-black/20 transition-colors flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-gold text-[#0a0a0b] flex items-center justify-center shadow-[0_0_35px_rgba(212,175,55,0.6)] group-hover/drive:scale-110 transition-transform">
+                          <Play className="w-7 h-7 fill-current translate-x-0.5" />
+                        </div>
+                      </div>
+                      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs font-mono text-[#f4f1ea] pointer-events-none">
+                        <span className="px-3 py-1 rounded-md bg-[#0a0a0b]/85 border border-white/10 backdrop-blur-md">
+                          GOOGLE DRIVE 4K STREAM
+                        </span>
+                        <span className="px-3 py-1 rounded-md bg-gold/20 border border-gold/40 text-gold-light backdrop-blur-md">
+                          CLICK TO STREAM
+                        </span>
+                      </div>
+                    </div>
+                  ) : currentProject.videoSrc ? (
+                    <video
+                      ref={videoRef}
+                      src={`${currentProject.videoSrc}#t=0.001`}
+                      autoPlay
+                      playsInline
+                      loop
+                      muted={isMuted}
+                      className="w-full h-full object-contain cursor-pointer"
+                      onClick={togglePlay}
+                    />
+                  ) : null}
                 </div>
               </div>
             )}
