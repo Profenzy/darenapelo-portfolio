@@ -49,10 +49,10 @@ export default function ClientSpotlight({ onOpenProject }: ClientSpotlightProps)
               <span>KEY CLIENT CASE STUDY</span>
             </div>
             <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-[#f4f1ea]">
-              Client Spotlight: <span className="gold-gradient-text">Trixy Castro</span>
+              Client Spotlight: <span className="gold-gradient-text">Sam Rockwell</span>
             </h2>
             <p className="mt-2 text-base text-[#8d8b86] font-mono">
-              La Escuela Nueva &bull; Success Unlocked &bull; High-Ticket Spanish Education
+              Real Estate Capital &bull; La Escuela Nueva &bull; High-Ticket Financial Masterclasses
             </p>
           </div>
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#8d8b86]">
@@ -69,8 +69,8 @@ export default function ClientSpotlight({ onOpenProject }: ClientSpotlightProps)
               {/* Media Frame */}
               <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[#080809]">
                 <Image
-                  src="/thumbnails/longform-tn.png"
-                  alt="Trixy Castro La Escuela Nueva Masterclass Thumbnail"
+                  src="/thumbnails/sam-rockwell.png"
+                  alt="Sam Rockwell Real Estate Masterclass Thumbnail"
                   fill
                   sizes="(max-width: 1024px) 100vw, 60vw"
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -79,10 +79,10 @@ export default function ClientSpotlight({ onOpenProject }: ClientSpotlightProps)
                 {/* Subtle vignette */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0b]/90 via-black/20 to-transparent pointer-events-none" />
 
-                {/* Live video layer if playing */}
+                {/* Live video layer if playing: Authentic 16:9 Sam Rockwell Video */}
                 {isPlaying && (
                   <video
-                    src="/videos/short-02.mp4"
+                    src="/videos/longforms/Sam%20Rockwell.mp4"
                     autoPlay
                     controls
                     playsInline
@@ -95,7 +95,7 @@ export default function ClientSpotlight({ onOpenProject }: ClientSpotlightProps)
                   <button
                     onClick={() => setIsPlaying(true)}
                     className="absolute inset-0 m-auto w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gold/90 hover:bg-gold text-[#0a0a0b] flex items-center justify-center shadow-[0_0_35px_rgba(212,175,55,0.6)] hover:scale-110 transition-all z-10 cursor-pointer"
-                    aria-label="Play Trixy Castro Case Study Preview"
+                    aria-label="Play Sam Rockwell Masterclass Preview"
                   >
                     <Play className="w-7 h-7 sm:w-8 sm:h-8 fill-current translate-x-0.5" />
                   </button>
@@ -104,10 +104,10 @@ export default function ClientSpotlight({ onOpenProject }: ClientSpotlightProps)
                 {/* Bottom Video Label Overlay */}
                 <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs font-mono text-[#f4f1ea] pointer-events-none z-10">
                   <span className="px-3 py-1 rounded-md bg-[#0a0a0b]/80 border border-white/10 backdrop-blur-md">
-                    MASTERCLASS EPISODE 03 // 14:20
+                    SAM ROCKWELL // 14:15
                   </span>
                   <span className="px-3 py-1 rounded-md bg-gold/20 border border-gold/40 text-gold-light backdrop-blur-md">
-                    BILINGUAL SPANISH CUT
+                    REAL ESTATE &amp; WEALTH MASTERCLASS
                   </span>
                 </div>
               </div>
