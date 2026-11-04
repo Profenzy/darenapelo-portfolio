@@ -107,26 +107,26 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 lg:p-8 bg-[#0a0a0b]/90 backdrop-blur-xl animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 lg:p-8 bg-[#0a0a0b]/92 backdrop-blur-xl animate-fade-in">
       <div className="absolute inset-0" onClick={onClose} />
 
-      <div className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#121214] border border-[#27272a] shadow-[0_25px_70px_rgba(0,0,0,0.85)] z-10 flex flex-col no-scrollbar">
+      <div className="relative w-full max-w-5xl max-h-[94vh] overflow-y-auto rounded-3xl bg-[#121214] border border-[#27272a] shadow-[0_25px_70px_rgba(0,0,0,0.95)] z-10 flex flex-col no-scrollbar">
         {/* Top Floating Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-30 p-2.5 rounded-full bg-[#0a0a0b]/80 border border-white/10 text-[#f4f1ea] hover:text-gold hover:border-gold/50 backdrop-blur-md transition-all shadow-lg"
+          className="absolute top-4 right-4 z-30 p-2.5 rounded-full bg-[#0a0a0b]/80 border border-white/20 text-[#f4f1ea] hover:text-gold hover:border-gold/50 backdrop-blur-md transition-all shadow-lg hover:scale-105"
           aria-label="Close Modal"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {/* Video Player Header Stage */}
-        <div className="relative w-full bg-[#080809] p-3 sm:p-6 overflow-hidden flex items-center justify-center border-b border-[#1a1a1e]">
+        {/* Video Player Header Stage - shrink-0 to prevent flex compression */}
+        <div className="relative w-full shrink-0 bg-[#080809] p-3 sm:p-6 flex items-center justify-center border-b border-[#1a1a1e]">
           <div
-            className={`relative overflow-hidden rounded-2xl bg-black flex items-center justify-center shadow-2xl group ${
+            className={`relative rounded-2xl bg-black flex items-center justify-center shadow-2xl overflow-hidden group ${
               isVertical
-                ? "w-[260px] sm:w-[300px] aspect-[9/16] max-h-[62vh]"
-                : "w-full max-w-4xl aspect-[16/9]"
+                ? "w-[240px] sm:w-[280px] md:w-[320px] aspect-[9/16] h-[380px] sm:h-[480px] md:h-[540px]"
+                : "w-full max-w-4xl aspect-video h-[260px] sm:h-[380px] md:h-[460px] lg:h-[500px]"
             }`}
           >
             {/* 1. Google Drive Streaming Player for Long Forms */}
@@ -136,6 +136,7 @@ export default function ProjectModal({ project, onClose, onInquire }: ProjectMod
                 allow="autoplay; fullscreen"
                 allowFullScreen
                 className="w-full h-full border-0 rounded-2xl bg-black"
+                style={{ width: "100%", height: "100%" }}
                 title={project.title}
               />
             ) : project.videoSrc ? (
