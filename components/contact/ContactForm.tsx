@@ -31,14 +31,44 @@ export default function ContactForm({ prefilledProject }: ContactFormProps) {
 
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
+    setErrorMessage(null);
+
+    try {
+      const response = await fetch("https://formspree.io/f/xpppnkdp", {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          projectType: formData.projectType,
+          referenceLink: formData.referenceLink || "None provided",
+          message: formData.message || "No additional details provided.",
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await response.json().catch(() => ({}));
+        if (data && data.errors && data.errors.length > 0) {
+          setErrorMessage(data.errors.map((err: { message: string }) => err.message).join(", "));
+        } else {
+          setErrorMessage("Failed to transmit brief. Please try again or email Apelodaren3@gmail.com directly.");
+        }
+      }
+    } catch (err) {
+      setErrorMessage("Network error. Please check your connection or reach out directly via WhatsApp/Gmail.");
+    } finally {
       setIsSubmitting(false);
-      setSubmitted(true);
-    }, 800);
+    }
   };
 
   const scrollToTop = () => {
@@ -146,6 +176,12 @@ export default function ContactForm({ prefilledProject }: ContactFormProps) {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  {errorMessage && (
+                    <div className="p-3.5 rounded-xl bg-red-950/40 border border-red-500/40 text-red-300 text-xs font-mono">
+                      {errorMessage}
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-[11px] font-mono uppercase tracking-wider text-[#8d8b86] mb-1.5">
@@ -153,9 +189,13 @@ export default function ContactForm({ prefilledProject }: ContactFormProps) {
                       </label>
                       <input
                         type="text"
+                        name="name"
                         required
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={(e) => {
+                          setFormData({ ...formData, name: e.target.value });
+                          if (errorMessage) setErrorMessage(null);
+                        }}
                         placeholder="e.g. Alex Rivera"
                         className="w-full px-4 py-3 rounded-xl bg-[#0a0a0b] border border-[#27272a] focus:border-gold focus:outline-none text-sm text-[#f4f1ea] transition-colors"
                       />
@@ -167,9 +207,13 @@ export default function ContactForm({ prefilledProject }: ContactFormProps) {
                       </label>
                       <input
                         type="email"
+                        name="email"
                         required
                         value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        onChange={(e) => {
+                          setFormData({ ...formData, email: e.target.value });
+                          if (errorMessage) setErrorMessage(null);
+                        }}
                         placeholder="name@company.com"
                         className="w-full px-4 py-3 rounded-xl bg-[#0a0a0b] border border-[#27272a] focus:border-gold focus:outline-none text-sm text-[#f4f1ea] transition-colors"
                       />
@@ -181,6 +225,7 @@ export default function ContactForm({ prefilledProject }: ContactFormProps) {
                       Project Category
                     </label>
                     <select
+                      name="projectType"
                       value={formData.projectType}
                       onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl bg-[#0a0a0b] border border-[#27272a] focus:border-gold focus:outline-none text-sm text-[#f4f1ea] transition-colors"
@@ -199,6 +244,7 @@ export default function ContactForm({ prefilledProject }: ContactFormProps) {
                     </label>
                     <input
                       type="url"
+                      name="referenceLink"
                       value={formData.referenceLink}
                       onChange={(e) => setFormData({ ...formData, referenceLink: e.target.value })}
                       placeholder="https://drive.google.com/... or reference link"
@@ -212,6 +258,7 @@ export default function ContactForm({ prefilledProject }: ContactFormProps) {
                     </label>
                     <textarea
                       rows={4}
+                      name="message"
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Outline target audience, raw footage volume, and conversion goals..."
